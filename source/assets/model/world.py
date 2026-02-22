@@ -3,7 +3,7 @@ import pyxel
 class World:
     TILE_SIZE = 8
 
-    HEIGHT = TILE_SIZE * 2
+    HEIGHT = TILE_SIZE * 4
     WIDTH = TILE_SIZE * 8
 
     # X and Y
@@ -19,7 +19,7 @@ class World:
         # Chão
         self.chao_x = 0
         self.chao_y = 200 - (3 * self.TILE_SIZE)
-        self.chao_width = 64 * self.TILE_SIZE
+        self.chao_width = self.WIDTH * self.TILE_SIZE
 
         self.tilemap = pyxel.tilemaps[0]
         self.world_map = []
@@ -40,15 +40,15 @@ class World:
         return
     
     def draw(self):
-        pyxel.bltm(
-            self.chao_x,
-            self.chao_y,
-            0,
-            0,
-            13 * self.TILE_SIZE,
-            self.chao_width,
-            3 * self.TILE_SIZE
-        )
+        # pyxel.bltm(
+        #     self.chao_x,
+        #     self.chao_y,
+        #     0,
+        #     0,
+        #     13 * self.TILE_SIZE,
+        #     self.chao_width,
+        #     3 * self.TILE_SIZE
+        # )
 
         for y in range(self.HEIGHT):
             for x in range(self.WIDTH):
