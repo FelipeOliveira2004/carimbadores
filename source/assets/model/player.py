@@ -55,7 +55,8 @@ class Player:
 
         # -------- GRAVIDADE --------
         self.vel_y += self.world.gravity
-        self.player_y += self.vel_y
+        self.vel_y = min(self.vel_y, 8)  # limite de queda
+        # self.player_y += self.vel_y
         self.on_ground = False
 
         self.resolve_vertical_collision()
@@ -137,25 +138,61 @@ class Player:
                 tile_x = left // self.world.TILE_SIZE
                 self.player_x = (tile_x + 1) * self.world.TILE_SIZE
 
+    # def resolve_vertical_collision(self):
+    #     if self.vel_y > 0:  # Caindo
+    #         bottom = self.player_y + self.HEIGHT - 1
+    #         left = self.player_x
+    #         right = self.player_x + self.WIDTH - 1
+
+    #         if (self.is_solid_at_pixel(left, bottom) or self.is_solid_at_pixel(right, bottom)):
+    #             tile_y = bottom // self.world.TILE_SIZE
+    #             self.player_y = tile_y * self.world.TILE_SIZE - self.HEIGHT
+    #             self.vel_y = 0
+    #             self.on_ground = True
+
+
+    #     elif self.vel_y < 0:  # Subindo (batendo cabeça)
+    #         top = self.player_y
+    #         left = self.player_x
+    #         right = self.player_x + self.WIDTH - 1
+
+    #         if (self.is_solid_at_pixel(left, top) or self.is_solid_at_pixel(right, top)):
+    #             tile_y = top // self.world.TILE_SIZE
+    #             self.player_y = (tile_y + 1) * self.world.TILE_SIZE
+    #             self.vel_y = 0
+
     def resolve_vertical_collision(self):
-        if self.vel_y > 0:  # Caindo
+
+        step = 1 if self.vel_y > 0 else -1
+
+        for _ in range(int(abs(self.vel_y))):
+
+            self.player_y += step
+
             bottom = self.player_y + self.HEIGHT - 1
-            left = self.player_x
-            right = self.player_x + self.WIDTH - 1
-
-            if (self.is_solid_at_pixel(left, bottom) or self.is_solid_at_pixel(right, bottom)):
-                tile_y = bottom // self.world.TILE_SIZE
-                self.player_y = tile_y * self.world.TILE_SIZE - self.HEIGHT
-                self.vel_y = 0
-                self.on_ground = True
-
-
-        elif self.vel_y < 0:  # Subindo (batendo cabeça)
             top = self.player_y
             left = self.player_x
             right = self.player_x + self.WIDTH - 1
 
-            if (self.is_solid_at_pixel(left, top) or self.is_solid_at_pixel(right, top)):
-                tile_y = top // self.world.TILE_SIZE
-                self.player_y = (tile_y + 1) * self.world.TILE_SIZE
-                self.vel_y = 0
+            # Player caindo
+            if step > 0:
+                if (
+                    self.is_solid_at_pixel(left, bottom) or
+                    self.is_solid_at_pixel(right, bottom)
+                ):
+                    tile_y = bottom // self.world.TILE_SIZE
+                    self.player_y = tile_y * self.world.TILE_SIZE - self.HEIGHT
+                    self.vel_y = 0
+                    self.on_ground = True
+                    return
+
+            # Player subindo
+            else:
+                if (
+                    self.is_solid_at_pixel(left, top) or
+                    self.is_solid_at_pixel(right, top)
+                ):
+                    tile_y = top // self.world.TILE_SIZE
+                    self.player_y = (tile_y + 1) * self.world.TILE_SIZE
+                    self.vel_y = 0
+                    return

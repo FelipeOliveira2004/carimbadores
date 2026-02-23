@@ -1,7 +1,8 @@
 import pyxel
 
-from assets.model.player import *
 from assets.model.world import *
+from assets.model.enemy import *
+from assets.model.player import *
 
 class Jogo:
     def __init__(self):
@@ -9,6 +10,7 @@ class Jogo:
         pyxel.load('assets/game.pyxres')
 
         self.world = World()
+        self.enemy = Enemy()
         self.player = Player(self.world)
 
         pyxel.run(self.update, self.draw)
@@ -20,7 +22,7 @@ class Jogo:
         pyxel.cls(0)
 
         self.world.draw()
+        self.enemy.draw()
         self.player.draw()
         
-
 Jogo()
