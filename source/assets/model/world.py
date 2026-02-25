@@ -11,6 +11,7 @@ class World:
     CHAO_1 = (1, 0)
     CHAO_2 = (1, 1)
     FAIXA = (0, 1)
+    ENEMY_TILE = (0, 2)
 
     def __init__(self):
         # Gravidade
@@ -23,19 +24,32 @@ class World:
 
         self.tilemap = pyxel.tilemaps[0]
         self.world_map = []
+        self.enemy_spawns = []
         
         for y in range(self.HEIGHT):
             self.world_map.append([])
             for x in range(self.WIDTH):
-                if self.tilemap.pget(x, y) == self.CHAO_1:
+
+                tile = self.tilemap.pget(x, y)
+
+                # Spawn inimigo
+                if tile == (0,2):
+                    self.enemy_spawns.append((x * self.TILE_SIZE, y * self.TILE_SIZE))
+                    self.world_map[y].append(self.VAZIO)
+
+                elif tile == self.CHAO_1:
                     self.world_map[y].append(self.CHAO_1)
-                elif self.tilemap.pget(x, y) == self.CHAO_2:
+
+                elif tile == self.CHAO_2:
                     self.world_map[y].append(self.CHAO_2)
-                elif self.tilemap.pget(x, y) == self.FAIXA:
+
+                elif tile == self.FAIXA:
                     self.world_map[y].append(self.FAIXA)
+
                 else:
                     self.world_map[y].append(self.VAZIO)
-    
+
+        print("Spawns encontrados:", self.enemy_spawns)
     def update(self):
         return
     

@@ -53,7 +53,7 @@ class Player:
         self.player_x += self.vel_x
         self.resolve_horizontal_collision()
 
-        # -------- GRAVIDADE --------
+        # Gravidade
         self.vel_y += self.world.gravity
         self.vel_y = min(self.vel_y, 8)  # limite de queda
         # self.player_y += self.vel_y
@@ -61,7 +61,7 @@ class Player:
 
         self.resolve_vertical_collision()
 
-        # -------- PULO --------
+        # Pulo
         if pyxel.btnp(pyxel.KEY_W) and self.on_ground:
             self.vel_y = self.jump_force
 
